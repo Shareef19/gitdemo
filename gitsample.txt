@@ -1,0 +1,244 @@
+
+
+
+
+
+
+
+
+
+
+package all.opendoar;
+
+ 
+
+import java.io.BufferedReader;
+
+import java.io.IOException;
+
+import java.io.InputStreamReader;
+
+import java.net.CookieHandler;
+
+import java.net.CookieManager;
+
+import java.net.CookiePolicy;
+
+import java.net.MalformedURLException;
+
+import java.net.URL;
+
+import java.net.URLConnection;
+
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import javax.net.ssl.SSLContext;
+
+import javax.net.ssl.TrustManager;
+
+import javax.net.ssl.X509TrustManager;
+
+ 
+
+
+
+
+
+
+
+
+
+public class Opendoar1 {
+
+ 
+
+    /**
+
+     * @param args the command line arguments
+
+     * @throws java.net.MalformedURLException
+
+     * @throws java.lang.InterruptedException
+
+     */
+
+    public static void main(String[] args) throws MalformedURLException, IOException, InterruptedException {
+
+     try{
+
+       for(int i=0;i<=147;i++)
+
+       {
+
+           TrustManager[] trustAllCerts = new TrustManager[]{
+
+        new X509TrustManager() {
+
+ 
+
+            public java.security.cert.X509Certificate[] getAcceptedIssuers()
+
+            {
+
+                return null;
+
+            }
+
+            public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType)
+
+            {
+
+                //No need to implement.
+
+            }
+
+            public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType)
+
+            {
+
+                //No need to implement.
+
+            }
+
+        }
+
+};
+
+ 
+
+// Install the all-trusting trust manager
+
+try
+
+{
+
+    SSLContext sc = SSLContext.getInstance("SSL");
+
+    sc.init(null, trustAllCerts, new java.security.SecureRandom());
+
+    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+}
+
+catch (Exception e)
+
+{
+
+    System.out.println(e);
+
+}
+
+ 
+
+      CookieHandler.setDefault(new CookieManager(null,CookiePolicy.ACCEPT_ALL));
+
+            
+
+          URL url = new URL("http://www.accede.iuacj.edu.uy/xmlui/browse?rpp=1&sort_by=2&type=dateissued&offset="+i+"&etal=-1&order=ASC");
+
+          TimeUnit.SECONDS.sleep(0);
+
+        URLConnection con= url.openConnection();
+
+          con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+            String line="";
+
+        int line_num=0;
+
+            String pdlink="";
+
+           
+
+        
+
+             while((line=in.readLine())!=null)
+
+             {
+
+               if(line_num>1)
+
+           {
+
+                 if((line.contains("\"/xmlui/handle"))&& (line.contains("</a>")))
+
+                 {
+
+                  
+
+                  pdlink=line.substring(line.indexOf("<a href=\"")+9,line.indexOf("\">"));
+
+                    
+
+                System.out.println("http://www.accede.iuacj.edu.uy/"+pdlink);
+
+                    
+
+                doi ob1=new doi();
+
+//                    ;
+
+                ob1.link("http://www.accede.iuacj.edu.uy/"+pdlink);
+
+//           
+
+                     System.out.println(i);
+
+                   break;
+
+                
+
+              
+
+             }
+
+                  }
+
+            line_num++;
+
+            
+
+             
+
+        }
+
+       }
+
+     
+
+     }
+
+        catch(IOException | InterruptedException e){
+
+            
+
+            System.out.println(e);
+
+    }
+
+    
+
+}
+
+}
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
