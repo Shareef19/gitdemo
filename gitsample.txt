@@ -1,0 +1,252 @@
+package america;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.concurrent.TimeUnit;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+public class America {
+
+    public static void main(String[] args) throws MalformedURLException, IOException, InterruptedException {
+     try{
+       for(int i=0;i<=73974;i++)
+       {
+           CookieHandler.setDefault(new CookieManager(null,CookiePolicy.ACCEPT_ALL));
+
+            
+
+          URL url = new URL("https://www.arca.fiocruz.br/browse?type=dateissued&sort_by=2&order=DESC&rpp=1&etal=-1&null=&offset="+i+"");
+
+          TimeUnit.SECONDS.sleep(0);
+
+        URLConnection con= url.openConnection();
+
+          con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+            String line="";
+
+        int line_num=0;
+
+            String pdlink="";
+
+           
+
+        
+
+             while((line=in.readLine())!=null)
+
+             {
+
+             String[] a=line.split("\">");
+             for(int j=0;j<a.length;j++){
+    
+                 if(a[j].contains("=\"/handle/icict")&&(line.contains("</a><span")))
+                 {
+                    
+                  pdlink=a[j].substring(a[j].indexOf("href=\"")+6);
+                   System.out.println("https://www.arca.fiocruz.br"+pdlink);
+                   doi ob=new doi();
+                   ob.link("https://www.arca.fiocruz.br"+pdlink);
+                     System.out.println(i);
+                    break;
+             }
+             
+             }
+
+              
+
+        }
+
+       }
+
+     
+
+     }
+
+        catch(IOException | InterruptedException e){
+
+            
+
+            System.out.println(e);
+
+    }
+
+    
+
+}
+
+} 
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+package america;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.concurrent.TimeUnit;
+
+public class doi{
+
+// public static void main(String[] args) throws MalformedURLException, IOException, InterruptedException {
+
+   public void link(String b) throws IOException, InterruptedException{
+         try{
+      
+                  File file = new File("C:\\Users\\admin\\Desktop\\america\\Arca.txt");
+             FileWriter fr = new FileWriter(file, true);
+             BufferedWriter br = new BufferedWriter(fr); 
+           CookieHandler.setDefault(new CookieManager(null,CookiePolicy.ACCEPT_ALL));
+             
+         URL url = new URL(b);
+       
+             TimeUnit.SECONDS.sleep(0);
+        URLConnection con= url.openConnection();
+          con.setRequestProperty("User-Agent", "Mozilla/5.0");
+             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String line="";
+       
+            String pdlink="";
+        
+             while((line=in.readLine())!=null)
+             { 
+                 String[] a=line.split("\">");
+             for(int j=0;j<a.length;j++){
+    
+                 if(a[j].contains("href=\"/bitstream/icict"))
+                 {
+                    
+                  pdlink=a[j].substring(a[j].indexOf("href=\"")+6);
+                   System.out.println("https://www.arca.fiocruz.br"+pdlink);
+//                 
+////                    pdflink ob1=new pdflink();
+//
+////                    ob1.link(pdlink,b);
+//
+                    br.write("https://www.arca.fiocruz.br"+pdlink);
+                     br.newLine();
+//              
+//                
+                    break;
+             }
+             
+             }
+            }br.close();
+
+            fr.close();
+             
+         }catch(IOException e){
+
+             System.out.println(e);
+
+         }
+
+              }
+
+  
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
