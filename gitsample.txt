@@ -13,7 +13,9 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+2018_paid_doi_488_2516494
 
+public
 public class America {
 
     public static void main(String[] args) throws MalformedURLException, IOException, InterruptedException {
